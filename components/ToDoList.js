@@ -21,10 +21,13 @@ const styles = `
     }
 `
 
+import ToDo from "./ToDo.js"
+
 export default function(props){
     return {
         add: e => {
-            if((e.target.parentNode.querySelector('input').value).trim() !== '') e.target.parentNode.querySelector('ul').innerHTML += `<input type="checkbox"><li>${e.target.parentNode.querySelector('input').value}</li>`
+            if((e.target.parentNode.querySelector('input').value).trim() !== '')
+                e.target.parentNode.querySelector('ul').render(ToDo(e.target.parentNode.querySelector('input').value))
             e.target.parentNode.querySelector('input').value = ''
         },
         html: `
