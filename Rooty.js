@@ -7,4 +7,8 @@ HTMLElement.prototype.render = function(component) {
             element.addEventListener(a, component[b])
         })
     })
+    document.querySelectorAll('[shadow]').forEach(element => {
+        element.shadow = element.attachShadow({mode: 'open'})
+        element.shadow.innerHTML += `${element.outerHTML}<style>${element.getAttribute('shadow')}</style>`
+    })
 }
