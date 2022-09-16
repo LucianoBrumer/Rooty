@@ -9,7 +9,7 @@ const styles = `
 
 export default ({title}) => ({
     html: `
-        <div shadow='${styles}'>
+        <div shadow styles='${styles}'>
             <h1>${title}</h1>
             <p>TExtooo</p>
         </div>
