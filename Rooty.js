@@ -1,24 +1,34 @@
 HTMLElement.prototype.render = function(component) {
     this.insertAdjacentHTML('beforeend', (component.html).trim())
 
-    document.querySelectorAll('[shadow]').forEach(element => {
-        element.attachShadow({mode: 'open'})
-        element.shadowRoot.innerHTML = element.outerHTML
+    this.querySelectorAll('[if]').forEach(el => {
+        if(component[el.getAttribute('if')](el) === false) el.style.display = 'none'
+        el.removeAttribute('if')
     })
 
-    document.querySelectorAll('[listener]').forEach(element => {
-        const events = element.getAttribute("listener").split(" ")
+    this.querySelectorAll('[shadow]').forEach(el => {
+        el.attachShadow({mode: 'open'})
+        el.shadowRoot.innerHTML = el.outerHTML
+        el.removeAttribute('shadow')
+    })
+
+    this.querySelectorAll('[listener]').forEach(el => {
+        const events = el.getAttribute("listener").split(" ")
         events.forEach(event => {
             const [a, b] = event.split('-')
-            element.hasAttribute('shadow')
-                ? element.shadowRoot.addEventListener(a, component[b])
-                : element.addEventListener(a, component[b])
+            if(!b) component[b] = component[a]
+            !!el.shadowRoot
+                ? el.shadowRoot.addEventListener(a, component[b])
+                : el.addEventListener(a, component[b])
+            if(a === 'load') el.dispatchEvent(new Event('load'))
         })
+        el.removeAttribute('listener')
     })
 
-    document.querySelectorAll('[styles]').forEach(element => {
-        element.hasAttribute('shadow')
-            ? element.shadowRoot.innerHTML += `<style>${element.getAttribute('styles')}</style>`
-            : element.innerHTML += `<style>${element.getAttribute('styles')}</style>`
+    this.querySelectorAll('[styles]').forEach(el => {
+        !!el.shadowRoot
+            ? el.shadowRoot.innerHTML += `<style>${el.getAttribute('styles')}</style>`
+            : el.innerHTML += `<style>${el.getAttribute('styles')}</style>`
+        el.removeAttribute('styles')
     })
 }

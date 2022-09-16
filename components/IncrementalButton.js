@@ -13,7 +13,11 @@ export default ({value}) => ({
         event.target.innerText = parseInt(event.target.innerText) + 1
     },
 
+    asd: event => {
+        console.log('asd');
+    },
+
     html: `
-        <button listener='click-test' style='${styles.button}'>${value}</button>
+        <button listener='click-test load-asd' style='${styles.button}'>${value}</button>
     `
 })
