@@ -24,11 +24,11 @@ const styles = `
 export default function(props){
     return {
         add: e => {
-            console.log('pedro');
-            // e.target.parentNode.querySelector('ul').innerHTML += `<li>${e.target.parentNode.querySelector('input').value}</li>`
+            if((e.target.parentNode.querySelector('input').value).trim() !== '') e.target.parentNode.querySelector('ul').innerHTML += `<input type="checkbox"><li>${e.target.parentNode.querySelector('input').value}</li>`
+            e.target.parentNode.querySelector('input').value = ''
         },
         html: `
-            <div styles='${styles}'>
+            <div>
                 <input type='text' placeholder='ToDo'>
                 <button listener='click-add'>Add</button>
                 <ul>
