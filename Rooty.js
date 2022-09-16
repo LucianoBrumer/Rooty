@@ -1,6 +1,5 @@
-const root = document.getElementById('root')
-root.render = component => {
-    root.insertAdjacentHTML('beforeend', component.html)
+HTMLElement.prototype.render = function(component) {
+    this.insertAdjacentHTML('beforeend', (component.html).trim())
     document.querySelectorAll('[listener]').forEach(element => {
         const events = element.getAttribute("listener").split(" ")
         events.forEach(event => {
@@ -9,4 +8,3 @@ root.render = component => {
         })
     })
 }
-export default root
