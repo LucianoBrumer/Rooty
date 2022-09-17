@@ -1,11 +1,8 @@
 export function MyCard(props) {
     return {
-        functions: {
-            sayHello: () => {
-                console.log('hello');
-            }
+        sayHello: event => {
+            console.log(event.target.innerText);
         },
-        tag: `my-card`,
         html: `
             <div>
                 <h1 listener='click-sayHello'>${props.title}</h1>

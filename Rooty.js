@@ -1,3 +1,7 @@
+HTMLElement.prototype.isInShadow = function(node) {
+    return node.getRootNode() instanceof ShadowRoot;
+}
+
 export default {
     createElement: callback => {
         const CEo = function (){
@@ -10,7 +14,10 @@ export default {
             this.props = {}
             this.getAttributeNames().forEach(attribute => this.props[attribute] = this.getAttribute(attribute))
             const component = callback(this.props)
-            this.functions = component.functions
+
+            Object.entries(component).forEach(([key, value]) => {
+                if(key !== 'html') this[key] = value
+            })
             this.insertAdjacentHTML('beforeend', (component.html).trim())
 
             this.querySelectorAll('[if]').forEach(el => {
@@ -27,17 +34,17 @@ export default {
             this.querySelectorAll('[listener]').forEach(el => {
                 const events = el.getAttribute("listener").split(" ")
                 events.forEach(event => {
-                    const [a, b] = event.split('-')
-                    !!el.shadowRoot
-                        ? el.shadowRoot.addEventListener(a, this.functions[b])
-                        : el.addEventListener(a, this.functions[b])
+                    const [a, b] = event.split('-');
+                    el.isInShadow == true
+                        ? el.shadowRoot.addEventListener(a, this[b])
+                        : el.addEventListener(a, this[b])
                     if(a === 'load') el.dispatchEvent(new Event('load'))
                 })
                 el.removeAttribute('listener')
             })
 
             this.querySelectorAll('[styles]').forEach(el => {
-                !!el.shadowRoot
+                el.isInShadow == true
                     ? el.shadowRoot.innerHTML += `<style>${el.getAttribute('styles')}</style>`
                     : el.innerHTML += `<style>${el.getAttribute('styles')}</style>`
                 el.removeAttribute('styles')
