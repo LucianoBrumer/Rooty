@@ -5,12 +5,12 @@ export function MyCard(props) {
         },
         css: `
             #container{
-                background: #fff;
+                background: red;
                 overflow: hidden;
                 border-radius: 25px;
             }
             * {
-                background: #fff;
+                background: blue;
             }
             p {
                 color: green;
