@@ -1,13 +1,19 @@
 export function MyCard(props) {
     return {
-        sayHello: event => {
+        sayText: event => {
             console.log(event.target.innerText);
         },
+        css: `
+            * {
+                background: red;
+            }
+            p {
+                color: green;
+            }
+        `,
         html: `
-            <div>
-                <h1 listener='click-sayHello'>${props.title}</h1>
-                <p>${props.desc}</p>
-            </div>
+            <h1 listener='click-sayText'>${props.title}</h1>
+            <p listener='click-sayText'>${props.desc}</p>
         `
     }
 }

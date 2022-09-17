@@ -1,6 +1,4 @@
 import Rooty from "./Rooty.js"
-import {ToDoList} from "./components/ToDoList.js"
-import {ToDo} from "./components/ToDo.js"
+import {MyCard} from "./components/MyCard.js"
 
-Rooty.createElement(ToDoList)
-Rooty.createElement(ToDo)
+Rooty.createElement(MyCard)

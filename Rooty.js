@@ -3,48 +3,25 @@ export default {
         const CEo = function (){
             return Reflect.construct(HTMLElement, [], CEo)
         }
-
         CEo.prototype = Object.create(HTMLElement.prototype)
 
         CEo.prototype.connectedCallback = function() {
-            this.props = {}
+            this.props = {children: this.childNodes[0].nodeValue.trim()}
             this.getAttributeNames().forEach(attribute => this.props[attribute] = this.getAttribute(attribute))
             const component = callback(this.props)
 
-            Object.entries(component).forEach(([key, value]) => {
-                if(key !== 'html') this[key] = value
-            })
-
-            this.insertAdjacentHTML('beforeend', (component.html).trim())
-
-            // this.querySelectorAll('[if]').forEach(el => {
-            //     if(component[el.getAttribute('if')](el) === false) el.style.display = 'none'
-            //     el.removeAttribute('if')
-            // })
-
-            // this.querySelectorAll('[shadow]').forEach(el => {
-            //     el.attachShadow({mode: 'open'})
-            //     // el.shadowRoot.innerHTML = el.outerHTML
-            //     el.removeAttribute('shadow')
-            // })
-
-            this.querySelectorAll('[listener]').forEach(el => {
-                const events = el.getAttribute("listener").split(" ")
-                events.forEach(event => {
-                    const [a, b] = event.split('-');
-                    if(!b) this[b] = component[a]
-                    el.addEventListener(a, this[b])
-                    if(a === 'load') el.dispatchEvent(new Event('load'))
+            this.attachShadow({mode: 'open'})
+            this.shadowRoot.innerHTML = (`<div>${component.html + this.innerHTML}</div><style>${component.css}</style>`).trim()
+            this.shadowRoot.style = 'background: blue'
+            this.shadowRoot.querySelectorAll('[listener]').forEach(element => {
+                const listeners = element.getAttribute("listener").split(" ")
+                listeners.forEach(event => {
+                    const [eventName, methodName] = event.split('-');
+                    if(!methodName) this[methodName] = component[eventName]
+                    element.addEventListener(eventName, component[methodName])
+                    if(eventName === 'load') element.dispatchEvent(new Event('load'))
                 })
-                el.removeAttribute('listener')
-            })
-
-            this.querySelectorAll('[styles]').forEach(el => {
-                // !!el.shadowRoot
-                //     ? el.shadowRoot.innerHTML += `<style>${el.getAttribute('styles')}</style>`
-                    // : el.innerHTML += `<styl/e>${el.getAttribute('styles')}</style>`
-                this.insertAdjacentHTML('beforeend', (`<style>${el.getAttribute('styles')}</style>`).trim())
-                el.removeAttribute('styles')
+                element.removeAttribute('listener')
             })
         }
 
