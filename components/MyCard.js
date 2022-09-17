@@ -4,8 +4,13 @@ export function MyCard(props) {
             console.log(event.target.innerText);
         },
         css: `
+            #container{
+                background: #fff;
+                overflow: hidden;
+                border-radius: 25px;
+            }
             * {
-                background: red;
+                background: #fff;
             }
             p {
                 color: green;
