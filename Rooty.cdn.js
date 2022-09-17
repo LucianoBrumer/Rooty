@@ -36,4 +36,3 @@ const Rooty = {
         customElements.define(tag, CEo)
     }
 }
-export default Rooty;
