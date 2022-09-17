@@ -1,5 +1,9 @@
 HTMLElement.prototype.isInShadow = function(node) {
-    return node.getRootNode() instanceof ShadowRoot;
+    return node.getRootNode() instanceof ShadowRoot
+}
+
+HTMLElement.prototype.styles = function(node) {
+    return getComputedStyle(this)
 }
 
 export default {
@@ -18,6 +22,7 @@ export default {
             Object.entries(component).forEach(([key, value]) => {
                 if(key !== 'html') this[key] = value
             })
+
             this.insertAdjacentHTML('beforeend', (component.html).trim())
 
             this.querySelectorAll('[if]').forEach(el => {
@@ -51,8 +56,7 @@ export default {
             })
         }
 
-        const tag = callback.name.replace(/([a-z0-9])([A-Z])/g, '$1 $2').toLowerCase().replace(' ', '-')
+        const tag = callback.name.replace(/([a-z0-9])([A-Z])/g, '$1 $2').toLowerCase().replaceAll(' ', '-')
         customElements.define(tag, CEo)
-
     }
 }
