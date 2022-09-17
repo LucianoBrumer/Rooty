@@ -1,11 +1,3 @@
-HTMLElement.prototype.isInShadow = function(node) {
-    return node.getRootNode() instanceof ShadowRoot
-}
-
-HTMLElement.prototype.styles = function(node) {
-    return getComputedStyle(this)
-}
-
 export default {
     createElement: callback => {
         const CEo = function (){
@@ -25,33 +17,33 @@ export default {
 
             this.insertAdjacentHTML('beforeend', (component.html).trim())
 
-            this.querySelectorAll('[if]').forEach(el => {
-                if(component[el.getAttribute('if')](el) === false) el.style.display = 'none'
-                el.removeAttribute('if')
-            })
+            // this.querySelectorAll('[if]').forEach(el => {
+            //     if(component[el.getAttribute('if')](el) === false) el.style.display = 'none'
+            //     el.removeAttribute('if')
+            // })
 
-            this.querySelectorAll('[shadow]').forEach(el => {
-                el.attachShadow({mode: 'open'})
-                el.shadowRoot.innerHTML = el.outerHTML
-                el.removeAttribute('shadow')
-            })
+            // this.querySelectorAll('[shadow]').forEach(el => {
+            //     el.attachShadow({mode: 'open'})
+            //     // el.shadowRoot.innerHTML = el.outerHTML
+            //     el.removeAttribute('shadow')
+            // })
 
             this.querySelectorAll('[listener]').forEach(el => {
                 const events = el.getAttribute("listener").split(" ")
                 events.forEach(event => {
                     const [a, b] = event.split('-');
-                    el.isInShadow == true
-                        ? el.shadowRoot.addEventListener(a, this[b])
-                        : el.addEventListener(a, this[b])
+                    if(!b) this[b] = component[a]
+                    el.addEventListener(a, this[b])
                     if(a === 'load') el.dispatchEvent(new Event('load'))
                 })
                 el.removeAttribute('listener')
             })
 
             this.querySelectorAll('[styles]').forEach(el => {
-                el.isInShadow == true
-                    ? el.shadowRoot.innerHTML += `<style>${el.getAttribute('styles')}</style>`
-                    : el.innerHTML += `<style>${el.getAttribute('styles')}</style>`
+                // !!el.shadowRoot
+                //     ? el.shadowRoot.innerHTML += `<style>${el.getAttribute('styles')}</style>`
+                    // : el.innerHTML += `<styl/e>${el.getAttribute('styles')}</style>`
+                this.insertAdjacentHTML('beforeend', (`<style>${el.getAttribute('styles')}</style>`).trim())
                 el.removeAttribute('styles')
             })
         }
